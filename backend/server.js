@@ -1,0 +1,49 @@
+import express from "express";
+import cors from "cors";
+import dotenv from "dotenv";
+import connectDB from "./src/config/db.js";
+import authRoutes from "./src/routes/authRoutes.js";
+import quizRoutes from "./src/routes/quizRoutes.js";
+import adminRoutes from "./src/routes/adminRoutes.js";
+
+dotenv.config();
+const app = express();
+
+// Kết nối Database
+await connectDB();
+
+// 🌐 Middleware
+app.use(cors({ origin: "*" }));
+app.use(express.json());
+
+// 🧾 Logger
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
+// 🚀 Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/quizzes", quizRoutes);
+app.use("/api/admin", adminRoutes);
+app.get("/", (req, res) => {
+  res.send("API đang chạy ngon lành!");
+});
+
+// 404 Handler
+app.use((req, res) => {
+  res.status(404).json({ message: "API không tồn tại" });
+});
+
+// Error Handler
+app.use((err, req, res, next) => {
+  console.error("❌ Error:", err.message);
+  res.status(500).json({
+    message: err.message || "Lỗi server",
+  });
+});
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
