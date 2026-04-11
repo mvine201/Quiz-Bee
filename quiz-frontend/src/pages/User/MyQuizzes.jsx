@@ -45,6 +45,12 @@ const MyQuizzes = () => {
 
         <div className="flex gap-3">
           <Link
+            to="/my-quizzes/generate"
+            className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition flex items-center gap-2 shadow-sm"
+          >
+            <span>🎲</span> Tạo Từ Ngân Hàng
+          </Link>
+          <Link
             to="/my-quizzes/create-manual"
             className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition flex items-center gap-2 shadow-sm"
           >

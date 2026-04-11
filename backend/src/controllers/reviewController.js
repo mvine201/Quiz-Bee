@@ -1,5 +1,5 @@
 import Review from "../models/Review.js";
-
+//Thêm đánh giá cho quiz
 export const addReview = async (req, res) => {
   try {
     const { quizId, rating, comment } = req.body;
@@ -14,7 +14,7 @@ export const addReview = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
+//Lấy tất cả đánh giá của một quiz
 export const getQuizReviews = async (req, res) => {
   try {
     const reviews = await Review.find({ quiz: req.params.quizId })

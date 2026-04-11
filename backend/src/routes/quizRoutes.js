@@ -12,7 +12,8 @@ import {
   submitQuiz,
   importQuizUniversal,
   parseFilePreview,
-  getUserHistory, // 1. Thêm import hàm này
+  getUserHistory,
+  generateQuizFromBank,
 } from "../controllers/quizController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -39,7 +40,7 @@ router.get("/:quizId/reviews", getQuizReviews);
 
 // Quiz chung
 router.route("/").post(protect, createQuiz).get(protect, getMyQuizzes);
-
+router.post("/generate-from-bank", protect, generateQuizFromBank);
 // --- CÁC ROUTE CÓ BIẾN ĐỘNG (:id) ĐẶT DƯỚI CÙNG ---
 
 router.get("/:id/take", protect, getQuizForTake);
