@@ -73,6 +73,10 @@ const quizApi = {
   getHistory: () => {
     return axiosClient.get("/quizzes/user/history");
   },
+  // Tạo đề thi từ ngân hàng câu hỏi
+  generateQuizFromBank: (data) => {
+    return axiosClient.post("/quizzes/generate-from-bank", data);
+  },
 };
 
 export default quizApi;

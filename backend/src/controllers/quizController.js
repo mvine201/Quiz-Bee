@@ -1,5 +1,6 @@
 import Quiz from "../models/Quiz.js";
 import QuizResult from "../models/QuizResult.js";
+import QuestionBank from "../models/QuestionBank.js";
 import xlsx from "xlsx";
 import mammoth from "mammoth";
 
@@ -446,6 +447,83 @@ export const getUserHistory = async (req, res) => {
       .sort({ createdAt: -1 });
 
     res.json(results);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+// 10. 🎲 Tạo đề thi từ Ngân hàng câu hỏi
+export const generateQuizFromBank = async (req, res) => {
+  try {
+    const {
+      bankId,
+      mode, // "random" hoặc "manual"
+      numQuestions, // số lượng câu nếu random
+      selectedQuestionIds, // mảng ID câu hỏi nếu manual
+      // Các thông số của Quiz
+      title,
+      description,
+      timeLimit,
+      attemptsAllowed,
+      isPublic,
+      shuffleQuestions,
+      shuffleAnswers,
+    } = req.body;
+
+    const bank = await QuestionBank.findById(bankId);
+    if (!bank)
+      return res
+        .status(404)
+        .json({ message: "Không tìm thấy Ngân hàng câu hỏi" });
+
+    if (bank.author.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "Bạn không có quyền sử dụng ngân hàng này" });
+    }
+
+    let finalQuestions = [];
+
+    if (mode === "random") {
+      if (numQuestions > bank.questions.length) {
+        return res
+          .status(400)
+          .json({ message: "Số câu yêu cầu lớn hơn số câu trong ngân hàng!" });
+      }
+      // Shuffle array và lấy số lượng câu
+      const shuffled = [...bank.questions].sort(() => 0.5 - Math.random());
+      finalQuestions = shuffled.slice(0, parseInt(numQuestions));
+    } else if (mode === "manual") {
+      // Lọc ra các câu hỏi có ID nằm trong mảng selectedQuestionIds
+      finalQuestions = bank.questions.filter((q) =>
+        selectedQuestionIds.includes(q._id.toString()),
+      );
+    } else {
+      return res.status(400).json({ message: "Chế độ tạo không hợp lệ" });
+    }
+
+    if (finalQuestions.length === 0) {
+      return res
+        .status(400)
+        .json({ message: "Không có câu hỏi nào được chọn!" });
+    }
+
+    // Tạo đề thi mới với danh sách câu hỏi đã lọc
+    const newQuiz = await Quiz.create({
+      title,
+      description: description || `Đề thi tạo từ ngân hàng: ${bank.title}`,
+      timeLimit: parseInt(timeLimit) || 15,
+      attemptsAllowed: parseInt(attemptsAllowed) || 0,
+      isPublic: isPublic || false,
+      shuffleQuestions: shuffleQuestions || false,
+      shuffleAnswers: shuffleAnswers || false,
+      questions: finalQuestions,
+      author: req.user._id,
+      status: "pending", // Đề thi mới tạo vẫn cần duyệt nếu public
+    });
+
+    res
+      .status(201)
+      .json({ message: "Tạo đề thi từ ngân hàng thành công", quiz: newQuiz });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

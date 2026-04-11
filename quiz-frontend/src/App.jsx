@@ -23,6 +23,9 @@ import ManageUsers from "./pages/Admin/ManageUsers";
 import ModerateQuizzes from "./pages/Admin/ModerateQuizzes";
 import CreateQuizManual from "./pages/User/CreateQuizManual";
 import History from "./pages/User/History";
+import QuestionBankList from "./pages/Bank/QuestionBankList";
+import CreateQuestionBank from "./pages/Bank/CreateQuestionBank";
+import GenerateQuizFromBank from "./pages/Bank/GenerateQuizFromBank";
 
 function App() {
   return (
@@ -46,12 +49,19 @@ function App() {
               <Route path="my-quizzes" element={<MyQuizzes />} />
               <Route path="my-quizzes/create" element={<CreateQuiz />} />
               <Route path="my-quizzes/edit/:id" element={<EditQuiz />} />
+
               <Route
                 path="my-quizzes/create-manual"
                 element={<CreateQuizManual />}
               />
               <Route path="history" element={<History />} />
             </Route>
+            <Route path="banks" element={<QuestionBankList />} />
+            <Route path="banks/create" element={<CreateQuestionBank />} />
+            <Route
+              path="my-quizzes/generate"
+              element={<GenerateQuizFromBank />}
+            />
           </Route>
 
           {/* Nhóm Route dùng AdminLayout (Chỉ Admin) */}

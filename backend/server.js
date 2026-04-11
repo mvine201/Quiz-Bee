@@ -5,6 +5,7 @@ import connectDB from "./src/config/db.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import quizRoutes from "./src/routes/quizRoutes.js";
 import adminRoutes from "./src/routes/adminRoutes.js";
+import bankRoutes from "./src/routes/bankRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -26,6 +27,7 @@ app.use((req, res, next) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/quizzes", quizRoutes);
 app.use("/api/admin", adminRoutes);
+app.use("/api/banks", bankRoutes);
 app.get("/", (req, res) => {
   res.send("API đang chạy ngon lành!");
 });

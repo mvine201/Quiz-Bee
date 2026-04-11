@@ -19,6 +19,12 @@ const MainLayout = () => {
                 <Link to="/" className="hover:underline">
                   Trang chủ
                 </Link>
+                <Link
+                  to="/banks"
+                  className="hover:underline text-indigo-200 font-semibold"
+                >
+                  Ngân Hàng Câu Hỏi
+                </Link>
                 <Link to="/my-quizzes" className="hover:underline">
                   Quản lý Đề Thi
                 </Link>

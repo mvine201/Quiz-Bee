@@ -13,7 +13,7 @@ router.post("/register", register);
 router.post("/login", login);
 router.post("/forgot-password", forgotPassword);
 
-// 👈 Route kiểm tra mã OTP (Method: GET)
+// Route kiểm tra mã OTP (Method: GET)
 router.get("/verify-otp/:token", verifyOTP);
 
 // Route đặt lại mật khẩu mới (Method: PUT)
