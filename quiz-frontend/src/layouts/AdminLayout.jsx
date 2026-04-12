@@ -35,6 +35,16 @@ const AdminLayout = () => {
         </div>
         <nav className="flex-1 mt-6 flex flex-col space-y-1">
           <Link
+            to="/admin"
+            className={`px-6 py-4 transition-colors ${
+              location.pathname === "/admin" || location.pathname === "/admin/"
+                ? "bg-blue-800 border-l-4 border-yellow-400"
+                : "hover:bg-blue-700 border-l-4 border-transparent"
+            }`}
+          >
+            📊 Tổng Quan Hệ Thống
+          </Link>
+          <Link
             to="/admin/users"
             className={`px-6 py-4 transition-colors ${isActive("/admin/users")}`}
           >
@@ -47,16 +57,7 @@ const AdminLayout = () => {
             📝 Kiểm duyệt Đề thi
           </Link>
         </nav>
-        <div className="p-4">
-          <Link
-            to="/"
-            className="block w-full text-center bg-gray-800 hover:bg-gray-700 py-2 rounded transition"
-          >
-            ⬅️ Về Trang Chủ
-          </Link>
-        </div>
       </aside>
-
       {/* Main Content Area */}
       <main className="flex-1 p-8 overflow-y-auto">
         <Outlet />

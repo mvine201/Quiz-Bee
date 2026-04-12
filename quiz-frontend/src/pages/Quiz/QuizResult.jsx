@@ -1,9 +1,17 @@
+import { useState } from "react";
 import { useLocation, Link } from "react-router-dom";
+import quizApi from "../../services/quizApi";
 
 const QuizResult = () => {
   const location = useLocation();
   const result = location.state?.result;
-  const quiz = location.state?.quiz; // Lấy thêm quiz để biết nội dung câu hỏi
+  const quiz = location.state?.quiz;
+
+  // --- STATE CHO ĐÁNH GIÁ ---
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [submittingReview, setSubmittingReview] = useState(false);
+  const [isReviewed, setIsReviewed] = useState(false); // Check xem đã gửi đánh giá chưa
 
   if (!result || !quiz) {
     return (
@@ -16,9 +24,29 @@ const QuizResult = () => {
     );
   }
 
+  // --- HÀM GỬI ĐÁNH GIÁ ---
+  const handleSubmitReview = async (e) => {
+    e.preventDefault();
+    if (!comment.trim()) return;
+
+    setSubmittingReview(true);
+    try {
+      await quizApi.addReview({
+        quizId: quiz._id,
+        rating,
+        comment,
+      });
+      setIsReviewed(true); // Đổi trạng thái để ẩn form đi
+    } catch (err) {
+      alert("Lỗi khi gửi đánh giá");
+    } finally {
+      setSubmittingReview(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto mt-10 pb-20">
-      {/* KHỐI TỔNG ĐIỂM */}
+      {/* 1. KHỐI TỔNG ĐIỂM (Giữ nguyên của bạn) */}
       <div className="bg-white p-8 rounded-lg shadow-lg text-center border-t-8 border-green-500 mb-8">
         <h1 className="text-3xl font-bold text-gray-800 mb-2">
           Hoàn thành bài thi!
@@ -58,14 +86,60 @@ const QuizResult = () => {
         </Link>
       </div>
 
-      {/* KHỐI CHI TIẾT ĐÁP ÁN */}
+      {/* ========================================== */}
+      {/* 2. KHỐI ĐÁNH GIÁ (MỚI THÊM VÀO ĐÂY) */}
+      {/* ========================================== */}
+      <div className="bg-white p-8 rounded-lg shadow border border-yellow-100 mb-8">
+        <h2 className="text-2xl font-bold mb-4 border-b pb-2 text-gray-800">
+          Bạn thấy đề thi này thế nào?
+        </h2>
+
+        {isReviewed ? (
+          <div className="bg-green-50 text-green-700 p-4 rounded text-center font-semibold">
+            🎉 Cảm ơn bạn đã để lại đánh giá!
+          </div>
+        ) : (
+          <form onSubmit={handleSubmitReview}>
+            <div className="mb-4 flex items-center gap-4">
+              <label className="font-semibold text-gray-700">Chấm điểm:</label>
+              <select
+                value={rating}
+                onChange={(e) => setRating(Number(e.target.value))}
+                className="border p-2 rounded focus:ring-2 focus:ring-blue-500 bg-gray-50"
+              >
+                <option value="5">⭐⭐⭐⭐⭐ (Tuyệt vời)</option>
+                <option value="4">⭐⭐⭐⭐ (Rất tốt)</option>
+                <option value="3">⭐⭐⭐ (Bình thường)</option>
+                <option value="2">⭐⭐ (Hơi tệ)</option>
+                <option value="1">⭐ (Quá tệ)</option>
+              </select>
+            </div>
+            <textarea
+              required
+              placeholder="Chia sẻ trải nghiệm của bạn sau khi làm bài (đề khó, dễ, hay bị lỗi gì không?)..."
+              className="w-full border rounded p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              rows="3"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            ></textarea>
+            <button
+              type="submit"
+              disabled={submittingReview}
+              className={`px-6 py-2 rounded text-white font-semibold transition ${submittingReview ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"}`}
+            >
+              {submittingReview ? "Đang gửi..." : "Gửi đánh giá"}
+            </button>
+          </form>
+        )}
+      </div>
+
+      {/* 3. KHỐI CHI TIẾT ĐÁP ÁN (Giữ nguyên của bạn) */}
       <div className="bg-white p-8 rounded-lg shadow border border-gray-100">
         <h2 className="text-2xl font-bold mb-6 border-b pb-2">
           Chi tiết bài làm
         </h2>
         <div className="space-y-6">
           {quiz.questions.map((q, index) => {
-            // Tìm kết quả của câu hỏi này trong mảng userAnswers
             const answerDetail = result.userAnswers.find(
               (a) => a.questionId === q._id,
             );
@@ -90,14 +164,11 @@ const QuizResult = () => {
                 <div className="space-y-2">
                   {q.options.map((opt, optIndex) => {
                     let optClass = "p-2 rounded border text-gray-700 bg-white";
-
-                    // Nếu là đáp án user chọn
                     if (selectedOpt === optIndex) {
                       optClass = isCorrect
                         ? "p-2 rounded border bg-green-500 text-white font-semibold border-green-600"
                         : "p-2 rounded border bg-red-500 text-white font-semibold border-red-600";
                     }
-
                     return (
                       <div key={optIndex} className={optClass}>
                         {String.fromCharCode(65 + optIndex)}. {opt}

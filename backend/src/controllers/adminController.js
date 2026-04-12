@@ -1,6 +1,6 @@
 import User from "../models/User.js";
 import Quiz from "../models/Quiz.js";
-
+import QuizResult from "../models/QuizResult.js";
 // ==========================================
 // 👥 QUẢN LÝ USER
 // ==========================================
@@ -93,6 +93,33 @@ export const moderateQuiz = async (req, res) => {
       message: `Đã ${action === "approve" ? "duyệt" : "từ chối"} đề thi thành công`,
       quizId: quiz._id,
       status: quiz.status,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+// Thêm hàm này vào adminController.js
+// 5. Thống kê tổng quan cho dashboard admin
+export const getDashboardStats = async (req, res) => {
+  try {
+    const totalUsers = await User.countDocuments();
+    const activeUsers = await User.countDocuments({ status: "active" });
+    const blockedUsers = await User.countDocuments({ status: "blocked" });
+
+    const totalQuizzes = await Quiz.countDocuments();
+    const pendingQuizzes = await Quiz.countDocuments({ status: "pending" });
+    const approvedQuizzes = await Quiz.countDocuments({ status: "approved" });
+
+    const totalResults = await QuizResult.countDocuments();
+
+    res.status(200).json({
+      users: { total: totalUsers, active: activeUsers, blocked: blockedUsers },
+      quizzes: {
+        total: totalQuizzes,
+        pending: pendingQuizzes,
+        approved: approvedQuizzes,
+      },
+      results: { total: totalResults },
     });
   } catch (error) {
     res.status(500).json({ message: error.message });

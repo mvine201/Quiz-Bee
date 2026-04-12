@@ -4,6 +4,7 @@ import {
   toggleUserStatus,
   getPendingQuizzes,
   moderateQuiz,
+  getDashboardStats,
 } from "../controllers/adminController.js";
 import { protect, adminOnly } from "../middleware/authMiddleware.js";
 
@@ -19,5 +20,6 @@ router.put("/users/:id/toggle-status", toggleUserStatus);
 // --- Routes Kiểm duyệt Quiz ---
 router.get("/quizzes/pending", getPendingQuizzes);
 router.put("/quizzes/:id/moderate", moderateQuiz);
-
+// --- Route Thống kê Dashboard ---
+router.get("/stats", getDashboardStats);
 export default router;

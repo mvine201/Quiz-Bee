@@ -45,7 +45,12 @@ const QuestionBankList = () => {
         <h2 className="text-3xl font-bold text-gray-800 border-l-4 border-indigo-600 pl-3">
           Ngân Hàng Câu Hỏi
         </h2>
-
+        <Link
+          to="/banks/create-ai"
+          className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-2 px-6 rounded transition flex items-center gap-2 shadow-sm animate-pulse"
+        >
+          <span>✨</span> Dùng AI Tạo Ngân Hàng
+        </Link>
         <Link
           to="/banks/create"
           className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded transition flex items-center gap-2 shadow-sm"

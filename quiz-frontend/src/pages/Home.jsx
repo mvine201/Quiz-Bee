@@ -1,5 +1,5 @@
 import { useEffect, useState, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 import quizApi from "../services/quizApi";
 
@@ -28,7 +28,9 @@ const Home = () => {
 
     fetchQuizzes();
   }, [user]);
-
+  if (user && user.role === "admin") {
+    return <Navigate to="/admin" replace />;
+  }
   return (
     <div className="mt-8">
       {/* TIÊU ĐỀ TRANG */}

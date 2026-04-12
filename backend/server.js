@@ -6,6 +6,7 @@ import authRoutes from "./src/routes/authRoutes.js";
 import quizRoutes from "./src/routes/quizRoutes.js";
 import adminRoutes from "./src/routes/adminRoutes.js";
 import bankRoutes from "./src/routes/bankRoutes.js";
+import aiRoutes from "./src/routes/aiRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -28,6 +29,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/quizzes", quizRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/banks", bankRoutes);
+app.use("/api/ai", aiRoutes);
 app.get("/", (req, res) => {
   res.send("API đang chạy ngon lành!");
 });
