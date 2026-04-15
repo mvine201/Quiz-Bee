@@ -56,6 +56,18 @@ const AdminLayout = () => {
           >
             📝 Kiểm duyệt Đề thi
           </Link>
+          <Link
+            to="/admin/reports"
+            className={`px-6 py-4 transition-colors ${isActive("/admin/reports")}`}
+          >
+            🚩 Quản lý Báo cáo
+          </Link>
+          <Link
+            to="/profile"
+            className="text-sm text-yellow-400 hover:underline mt-1 block"
+          >
+            ⚙️ Chỉnh sửa hồ sơ
+          </Link>
         </nav>
       </aside>
       {/* Main Content Area */}

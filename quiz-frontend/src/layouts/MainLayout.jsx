@@ -34,6 +34,12 @@ const MainLayout = () => {
                     <Link to="/history" className="hover:underline">
                       Lịch sử thi
                     </Link>
+                    <Link
+                      to="/profile"
+                      className="font-medium hover:text-green-300 transition"
+                    >
+                      Chào, {user.username}
+                    </Link>
                   </>
                 )}
 

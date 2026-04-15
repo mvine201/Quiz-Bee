@@ -243,14 +243,37 @@ export const getMyQuizzes = async (req, res) => {
 };
 
 // 4. 🌍 Public
+// 4. 🌍 Public (Có Tìm kiếm & Phân trang)
 export const getPublicQuizzes = async (req, res) => {
   try {
-    const quizzes = await Quiz.find({ isPublic: true, status: "approved" })
-      .populate("author", "username")
-      .select("-questions")
-      .sort({ createdAt: -1 });
+    const { keyword, page = 1, limit = 6 } = req.query; // Mặc định mỗi trang 6 đề
 
-    res.json(quizzes);
+    const query = { isPublic: true, status: "approved" };
+
+    // Nếu người dùng có gõ tìm kiếm, tìm tương đối (regex) không phân biệt hoa thường
+    if (keyword) {
+      query.title = { $regex: keyword, $options: "i" };
+    }
+
+    // Tính toán số lượng bỏ qua (skip) để phân trang
+    const skip = (parseInt(page) - 1) * parseInt(limit);
+
+    const quizzes = await Quiz.find(query)
+      .populate("author", "username")
+      .select("-questions") // Không lấy chi tiết câu hỏi cho nhẹ
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(parseInt(limit));
+
+    // Đếm tổng số đề thi thỏa mãn điều kiện để tính tổng số trang
+    const total = await Quiz.countDocuments(query);
+
+    res.json({
+      quizzes,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(total / parseInt(limit)),
+      totalQuizzes: total,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

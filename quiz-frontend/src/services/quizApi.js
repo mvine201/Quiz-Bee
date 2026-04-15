@@ -1,8 +1,10 @@
 import axiosClient from "./axiosClient";
 
 const quizApi = {
-  getPublicQuizzes: () => {
-    return axiosClient.get("/quizzes/public");
+  getPublicQuizzes: (params = {}) => {
+    // Chuyển object params thành chuỗi query trên URL (VD: ?keyword=toán&page=1)
+    const queryString = new URLSearchParams(params).toString();
+    return axiosClient.get(`/quizzes/public?${queryString}`);
   },
 
   // Lấy chi tiết đề thi (để xem thể lệ)
@@ -76,6 +78,10 @@ const quizApi = {
   // Tạo đề thi từ ngân hàng câu hỏi
   generateQuizFromBank: (data) => {
     return axiosClient.post("/quizzes/generate-from-bank", data);
+  },
+  reportQuiz: (data) => {
+    // data gồm: { quizId, reason, description }
+    return axiosClient.post("/reports", data);
   },
 };
 

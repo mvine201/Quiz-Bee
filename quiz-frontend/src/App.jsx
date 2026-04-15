@@ -29,6 +29,9 @@ import GenerateQuizFromBank from "./pages/Bank/GenerateQuizFromBank";
 import GenerateQuizFromAI from "./pages/User/GenerateQuizFromAI";
 import CreateBankFromAI from "./pages/Bank/CreateBankFromAI";
 import Dashboard from "./pages/Admin/Dashboard";
+import ManageReports from "./pages/Admin/ManageReports";
+import Profile from "./pages/User/Profile";
+import EditBank from "./pages/Bank/EditBank";
 
 function App() {
   return (
@@ -48,10 +51,10 @@ function App() {
               <Route path="quizzes/:id" element={<QuizDetail />} />
               <Route path="quizzes/:id/take" element={<TakeQuiz />} />
               <Route path="quizzes/:id/result" element={<QuizResult />} />
-
               <Route path="my-quizzes" element={<MyQuizzes />} />
               <Route path="my-quizzes/create" element={<CreateQuiz />} />
               <Route path="my-quizzes/edit/:id" element={<EditQuiz />} />
+              <Route path="profile" element={<Profile />} />
               <Route
                 path="my-quizzes/generate-ai"
                 element={<GenerateQuizFromAI />}
@@ -69,6 +72,7 @@ function App() {
               path="my-quizzes/generate"
               element={<GenerateQuizFromBank />}
             />
+            <Route path="banks/edit/:id" element={<EditBank />} />
           </Route>
 
           {/* Nhóm Route dùng AdminLayout (Chỉ Admin) */}
@@ -77,6 +81,7 @@ function App() {
             <Route path="users" element={<ManageUsers />} />
             <Route path="quizzes" element={<ModerateQuizzes />} />
             <Route index element={<Dashboard />} />
+            <Route path="reports" element={<ManageReports />} />
           </Route>
         </Routes>
       </BrowserRouter>

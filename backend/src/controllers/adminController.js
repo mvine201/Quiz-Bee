@@ -1,9 +1,6 @@
 import User from "../models/User.js";
 import Quiz from "../models/Quiz.js";
 import QuizResult from "../models/QuizResult.js";
-// ==========================================
-// 👥 QUẢN LÝ USER
-// ==========================================
 
 // 1. Lấy danh sách tất cả người dùng (Có phân trang & Tìm kiếm)
 export const getAllUsers = async (req, res) => {

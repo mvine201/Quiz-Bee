@@ -19,9 +19,17 @@ export const createBank = async (req, res) => {
 // 2. Lấy danh sách ngân hàng của user
 export const getMyBanks = async (req, res) => {
   try {
-    const banks = await QuestionBank.find({ author: req.user._id })
-      .select("-questions") // Ẩn bớt câu hỏi để load list cho nhẹ
-      .sort({ createdAt: -1 });
+    // Dùng aggregate để đếm số lượng câu hỏi (questionCount) thay vì load cả mảng
+    const banks = await QuestionBank.aggregate([
+      { $match: { author: req.user._id } },
+      {
+        $addFields: {
+          questionCount: { $size: { $ifNull: ["$questions", []] } },
+        },
+      },
+      { $project: { questions: 0 } }, // Vẫn ẩn mảng questions đi cho nhẹ băng thông
+      { $sort: { createdAt: -1 } },
+    ]);
     res.json(banks);
   } catch (error) {
     res.status(500).json({ message: error.message });
