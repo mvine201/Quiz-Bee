@@ -24,8 +24,11 @@ const Login = () => {
       // Lưu vào Context và LocalStorage
       loginContext(response.user, response.token);
 
-      // Chuyển hướng về trang chủ
-      navigate("/");
+      if (response.user.role === "admin") {
+        navigate("/admin"); // Admin vào thẳng trang làm việc của Admin
+      } else {
+        navigate("/"); // User bình thường thì vào Trang chủ
+      }
     } catch (err) {
       // Bắt lỗi từ backend (ví dụ: Sai mật khẩu) trả về
       setError(

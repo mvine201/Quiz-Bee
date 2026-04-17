@@ -45,6 +45,12 @@ const MyQuizzes = () => {
 
         <div className="flex gap-3">
           <Link
+            to="/my-quizzes/generate-ai"
+            className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-2 px-4 rounded transition flex items-center gap-2 shadow-sm animate-pulse"
+          >
+            <span>✨</span> Tạo Bằng AI
+          </Link>
+          <Link
             to="/my-quizzes/generate"
             className="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition flex items-center gap-2 shadow-sm"
           >

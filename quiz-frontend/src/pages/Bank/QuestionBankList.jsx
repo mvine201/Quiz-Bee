@@ -24,20 +24,24 @@ const QuestionBankList = () => {
   const handleDelete = async (id) => {
     if (
       !window.confirm(
-        "Bạn có chắc chắn muốn xóa ngân hàng này không? Tất cả câu hỏi bên trong sẽ bị xóa!",
+        "Bạn có chắc chắn muốn xóa ngân hàng này không? Tất cả câu hỏi bên trong sẽ bị xóa vĩnh viễn!",
       )
     )
       return;
     try {
       await bankApi.deleteBank(id);
       setBanks(banks.filter((b) => b._id !== id));
-      alert("Đã xóa thành công!");
     } catch (err) {
       alert("Lỗi khi xóa ngân hàng");
     }
   };
 
-  if (loading) return <div className="text-center mt-10">Đang tải...</div>;
+  if (loading)
+    return (
+      <div className="text-center mt-10 text-gray-500 animate-pulse">
+        Đang tải dữ liệu...
+      </div>
+    );
 
   return (
     <div className="max-w-6xl mx-auto mt-8">
@@ -45,25 +49,32 @@ const QuestionBankList = () => {
         <h2 className="text-3xl font-bold text-gray-800 border-l-4 border-indigo-600 pl-3">
           Ngân Hàng Câu Hỏi
         </h2>
-
-        <Link
-          to="/banks/create"
-          className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded transition flex items-center gap-2 shadow-sm"
-        >
-          <span>➕</span> Tạo Ngân Hàng Mới
-        </Link>
+        <div className="flex gap-3">
+          <Link
+            to="/banks/create-ai"
+            className="bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-2 px-6 rounded-xl transition flex items-center gap-2 shadow-sm animate-pulse"
+          >
+            ✨ Dùng AI Tạo Ngân Hàng
+          </Link>
+          <Link
+            to="/banks/create"
+            className="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-6 rounded-xl transition flex items-center gap-2 shadow-sm"
+          >
+            ➕ Tạo Ngân Hàng Mới
+          </Link>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {banks.length === 0 ? (
-          <div className="col-span-full text-center py-10 bg-white rounded shadow text-gray-500">
+          <div className="col-span-full text-center py-10 bg-white rounded-2xl shadow text-gray-500 border border-gray-100">
             Bạn chưa có ngân hàng câu hỏi nào. Hãy tạo một cái mới!
           </div>
         ) : (
           banks.map((bank) => (
             <div
               key={bank._id}
-              className="bg-white p-6 rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition"
+              className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 hover:shadow-md transition flex flex-col"
             >
               <h3
                 className="text-xl font-bold text-gray-800 mb-2 truncate"
@@ -75,16 +86,25 @@ const QuestionBankList = () => {
                 {bank.description || "Không có mô tả"}
               </p>
 
-              <div className="flex justify-between items-center mt-4 pt-4 border-t">
-                <span className="bg-indigo-100 text-indigo-800 text-xs font-semibold px-2.5 py-0.5 rounded">
-                  {bank.questions?.length || 0} câu hỏi
+              <div className="flex justify-between items-center mt-auto pt-4 border-t border-gray-100">
+                <span className="bg-indigo-50 text-indigo-700 text-sm font-bold px-3 py-1 rounded-full">
+                  {/* SỬA LỖI ĐẾM CÂU HỎI TẠI ĐÂY: Sử dụng questionCount từ Aggregate */}
+                  {bank.questionCount || 0} câu hỏi
                 </span>
-                <button
-                  onClick={() => handleDelete(bank._id)}
-                  className="text-red-500 hover:text-red-700 text-sm font-semibold"
-                >
-                  Xóa
-                </button>
+                <div className="flex gap-4">
+                  <Link
+                    to={`/banks/edit/${bank._id}`}
+                    className="text-blue-600 hover:text-blue-800 text-sm font-bold transition-colors"
+                  >
+                    ✏️ Sửa
+                  </Link>
+                  <button
+                    onClick={() => handleDelete(bank._id)}
+                    className="text-red-500 hover:text-red-700 text-sm font-bold transition-colors"
+                  >
+                    🗑️ Xóa
+                  </button>
+                </div>
               </div>
             </div>
           ))

@@ -16,25 +16,40 @@ const MainLayout = () => {
             {user ? (
               <div className="flex items-center space-x-4">
                 <span className="font-medium">Chào, {user.username}</span>
-                <Link to="/" className="hover:underline">
-                  Trang chủ
-                </Link>
-                <Link
-                  to="/banks"
-                  className="hover:underline text-indigo-200 font-semibold"
-                >
-                  Ngân Hàng Câu Hỏi
-                </Link>
-                <Link to="/my-quizzes" className="hover:underline">
-                  Quản lý Đề Thi
-                </Link>
-                <Link to="/history" className="hover:underline">
-                  Lịch sử thi
-                </Link>
+                {/* 👉 CHỈ HIỂN THỊ MENU NÀY VỚI USER BÌNH THƯỜNG */}
+                {user.role !== "admin" && (
+                  <>
+                    <Link to="/" className="hover:underline">
+                      Trang chủ
+                    </Link>
+                    <Link
+                      to="/banks"
+                      className="hover:underline text-indigo-200 font-semibold"
+                    >
+                      Ngân Hàng Câu Hỏi
+                    </Link>
+                    <Link to="/my-quizzes" className="hover:underline">
+                      Quản lý Đề Thi
+                    </Link>
+                    <Link to="/history" className="hover:underline">
+                      Lịch sử thi
+                    </Link>
+                    <Link
+                      to="/profile"
+                      className="font-medium hover:text-green-300 transition"
+                    >
+                      Chào, {user.username}
+                    </Link>
+                  </>
+                )}
 
+                {/* 👉 CHỈ HIỂN THỊ NÚT NÀY VỚI ADMIN */}
                 {user.role === "admin" && (
-                  <Link to="/admin" className="text-yellow-300 hover:underline">
-                    Admin Panel
+                  <Link
+                    to="/admin"
+                    className="text-yellow-300 font-bold hover:underline"
+                  >
+                    ⚡ Vào Trang Quản Trị
                   </Link>
                 )}
                 <button
