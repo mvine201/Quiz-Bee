@@ -3,7 +3,7 @@ import axios from "axios";
 // Đặt base URL trỏ về Backend của bạn
 // Tốt nhất sau này nên đưa vào file .env (VITE_API_URL)
 const axiosClient = axios.create({
-  baseURL: "http://localhost:5000/api", // Thay đổi port nếu backend của bạn chạy port khác
+  baseURL: "http://localhost:5001/api", // Thay đổi port nếu backend của bạn chạy port khác
   headers: {
     "Content-Type": "application/json",
   },
