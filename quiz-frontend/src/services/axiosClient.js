@@ -37,7 +37,7 @@ axiosClient.interceptors.response.use(
       localStorage.removeItem("token");
       localStorage.removeItem("user");
       // Ép chuyển hướng về trang login bằng window.location (cách nhanh nhất bên ngoài React component)
-      window.location.href = "/login";
+      window.location.href = "/Quiz-Bee/#/login";
     }
 
     return Promise.reject(error);
