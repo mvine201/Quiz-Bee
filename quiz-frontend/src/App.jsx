@@ -36,7 +36,7 @@ import EditBank from "./pages/Bank/EditBank";
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           {/* Nhóm Route dùng MainLayout (User bình thường) */}
           <Route path="/" element={<MainLayout />}>
@@ -76,7 +76,7 @@ function App() {
           </Route>
 
           {/* Nhóm Route dùng AdminLayout (Chỉ Admin) */}
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route path="admin" element={<AdminLayout />}>
             {/* <Route index element={<ManageUsers />} /> */}
             <Route path="users" element={<ManageUsers />} />
             <Route path="quizzes" element={<ModerateQuizzes />} />
@@ -84,7 +84,7 @@ function App() {
             <Route path="reports" element={<ManageReports />} />
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </AuthProvider>
   );
 }
