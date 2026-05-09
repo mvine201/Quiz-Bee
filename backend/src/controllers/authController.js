@@ -91,6 +91,7 @@ export const forgotPassword = async (req, res) => {
       });
       res.status(200).json({ message: "Mã xác nhận đã được gửi vào email!" });
     } catch (err) {
+      console.error("❌ Forgot password email error:", err.message);
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
       await user.save();

@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null);
     localStorage.removeItem("user");
     localStorage.removeItem("token");
-    window.location.href = "/login"; // Bắn về trang login
+    window.location.hash = "/login";
   };
 
   return (

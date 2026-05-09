@@ -29,16 +29,22 @@ const QuizResult = () => {
     e.preventDefault();
     if (!comment.trim()) return;
 
+    const quizId = quiz._id || quiz.id;
+    if (!quizId) {
+      alert("Không tìm thấy mã đề thi để gửi đánh giá");
+      return;
+    }
+
     setSubmittingReview(true);
     try {
       await quizApi.addReview({
-        quizId: quiz._id,
+        quizId,
         rating,
-        comment,
+        comment: comment.trim(),
       });
       setIsReviewed(true); // Đổi trạng thái để ẩn form đi
     } catch (err) {
-      alert("Lỗi khi gửi đánh giá");
+      alert(err.response?.data?.message || "Lỗi khi gửi đánh giá");
     } finally {
       setSubmittingReview(false);
     }
